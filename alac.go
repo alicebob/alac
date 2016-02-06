@@ -1,3 +1,4 @@
+// Apple Lossless (ALAC) decoder
 package alac
 
 import (
