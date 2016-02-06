@@ -3,24 +3,11 @@ package alac
 
 import (
 	"fmt"
-	"unsafe"
 )
-
-/*
-#include <stdint.h>
-#include "alac.h"
-*/
-import "C"
-
-// type Alac *C.struct_alac_file
-type Alac struct {
-	// alac_file unsafe.Pointer
-	alac_file *C.struct_alac_file
-}
 
 // New alac decoder. Sample size 16, 2 chan!
 func New() (*Alac, error) {
-	a := C.create_alac(16, 2)
+	a := create_alac(16, 2)
 	if a == nil {
 		return nil, fmt.Errorf("can't create alac. No idea why, though")
 	}
@@ -38,15 +25,10 @@ func New() (*Alac, error) {
 	a.setinfo_86 = 0                      // fmtp[10];
 	a.setinfo_8a_rate = 44100             // fmtp[11];
 
-	C.allocate_buffers(a)
-	al := Alac{alac_file: a}
-	return &al, nil
+	a.allocateBuffers()
+	return a, nil
 }
 
-func (a *Alac) Decode(b []byte) []byte {
-	d := make([]byte, 10*1024) // a whole 10K. TODO :)
-	var l C.int = 0
-	// TODO: how do these arguments work?!?
-	C.decode_frame(a.alac_file, (*C.uchar)(&b[0]), unsafe.Pointer(&d[0]), &l)
-	return d[:l]
+func (a *Alac) Decode(f []byte) []byte {
+	return a.decodeFrame(f)
 }
