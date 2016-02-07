@@ -1,12 +1,9 @@
-ALAC (Apple Lossless) bindings for Go
+ALAC (Apple Lossless) decoder in pure Go
 
 ## install
 
 ` $ go install github.com/alicebob/alac `
 
-## status
+## Todo
 
-Barely works.
-
-* needs to clean up resources
 * fmtp stuff is hardcoded
